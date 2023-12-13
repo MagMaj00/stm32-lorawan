@@ -50,6 +50,7 @@ void SendResponse(DataRead_t *data)
 {
     uint8_t message[MESSAGE_SIZE];
     uint8_t message2[MESSAGE_SIZE];
+    uint8_t message3[MESSAGE_SIZE];
 
     /* Split each 16-bit data to 2x8-bit ones, with bit masking */
     message[0] = (data->temperature & 0xFF00) >> 8;
@@ -70,6 +71,10 @@ void SendResponse(DataRead_t *data)
 
     Serial.println("[INFO] Sending response");
 
+    for(int i = 0; i < 7; i++)
+        message3[i] = i;
+    message3[7] = 0x05;
+
     /*DEBUG*/  
     /*for (uint8_t i = 0; i<4; i++){
         Serial.println((float)message[i]);
@@ -85,6 +90,8 @@ void SendResponse(DataRead_t *data)
 
     /*Sending 2nd packet of data*/
     loraRadio.write(message2, 4);
+
+    loraRadio.write((uint8_t*)message3, 8);
 }
 
 /*Not in use*/
