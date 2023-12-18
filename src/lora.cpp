@@ -69,11 +69,10 @@ void SendResponse(DataRead_t *data)
     message2[1] = (int(soil_humidity*100) & 0x00FF);
     message2[2] = 0x04; //Attach EOT at the end of humidity string
 
+    message3[2] = 0x05;
+
     Serial.println("[INFO] Sending response");
 
-    for(int i = 0; i < 7; i++)
-        message3[i] = i;
-    message3[7] = 0x05;
 
     /*DEBUG*/  
     /*for (uint8_t i = 0; i<4; i++){
@@ -90,8 +89,9 @@ void SendResponse(DataRead_t *data)
 
     /*Sending 2nd packet of data*/
     loraRadio.write(message2, 4);
+    delay(2000);
 
-    loraRadio.write((uint8_t*)message3, 8);
+    loraRadio.write(message3, 4);
 }
 
 /*Not in use*/
@@ -132,6 +132,8 @@ void ReadData(uint8_t message[]){
             Serial.println(humidity_response[idx]);
         }
     }
+    if (message[2] == 0x05)
+        Serial.println("Another message sent successfully!");
     //Received packet with temperature and pressure
     else{
         float received_temperature = (float)((message[0] << 8) + message[1]) / 100;
