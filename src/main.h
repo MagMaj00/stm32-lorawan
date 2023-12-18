@@ -4,9 +4,7 @@
 #include "pinout.h"
 #include "config.h"
 
-
 #define BOOL(x) (x = (x + 1) % 2)
-
 
 
 //extern uint8_t loraMessage[MESSAGE_SIZE];
